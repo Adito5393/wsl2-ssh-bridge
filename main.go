@@ -147,7 +147,12 @@ func main() {
 		}
 		basePath := *gpgConfigBasepath
 		// fallback to default location if not specified
+
 		if basePath == "" {
+			basePath = filepath.Join(homeDir, "AppData", "Local", "gnupg")
+		}
+		if _, err := os.Stat(basePath); os.IsNotExist(err) {
+			//Fallback for gpg < 4.0.0
 			basePath = filepath.Join(homeDir, "AppData", "Roaming", "gnupg")
 		}
 		handleGPG(filepath.Join(basePath, *gpg))
